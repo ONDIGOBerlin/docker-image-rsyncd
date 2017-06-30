@@ -7,7 +7,7 @@ if [ "$1" == 'supervisord' ]; then
 	################### ################### ###################
 	VOLUME=${VOLUME:-/data}
 	OWNER_UID=${OWNER_UID:0}
-	#GROUP_ID=${GROUP_ID:-1000}
+	GROUP_ID=${GROUP_ID:-1000}
 
 	[ ! -d $VOLUME ] && mkdir -p $VOLUME
 
@@ -67,12 +67,12 @@ if [ "$1" == 'supervisord' ]; then
 	###################  now rsync specific ###################
 	################### ################### ###################
 		# TODO: for now removed group management
-	#id -u $GROUP &>/dev/null || (addgroup -g $GROUPID $GROUP && echo "created group $GROUP with id $GROUPID")
+	id -u $GROUP &>/dev/null || (addgroup -g $GROUPID $GROUP && echo "created group $GROUP with id $GROUPID")
 	## option -N does not seem to be available,
 	## option -D sets no pw for user
-	#id -u $OWNER &>/dev/null || (adduser  -D -G $GROUP -u $OWNERID $OWNER -h $VOLUME && echo "created user $OWNER with id $OWNERID")
+	id -u $OWNER &>/dev/null || (adduser  -D -G $GROUP -u $OWNERID $OWNER -h $VOLUME && echo "created user $OWNER with id $OWNERID")
 	#
-	#chown "${OWNER}:${GROUP}" "${VOLUME}"
+	chown "${OWNER}:${GROUP}" "${VOLUME}"
 
 
 	if [ -f '/var/run/rsyncd.pid' ]; then
@@ -88,7 +88,7 @@ if [ "$1" == 'supervisord' ]; then
 	[ -f /etc/rsyncd.conf ] || cat <<EOF > /etc/rsyncd.conf
 pid file = /var/run/rsyncd.pid
 uid = ${OWNER_UID}
-#gid = ${GROUP}
+gid = ${GROUP}
 use chroot = no
 log file = /dev/stdout
 reverse lookup = no
