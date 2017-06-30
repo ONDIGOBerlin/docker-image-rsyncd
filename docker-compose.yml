@@ -3,4 +3,4 @@ services:
         rsync:
                 build:
                         context: .
-                image: eugenmayer/rsync
+                image: ondigo/rsync
